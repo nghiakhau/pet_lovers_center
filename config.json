@@ -1,0 +1,22 @@
+{
+  "num_features": 12,
+  "embedding_dim": 2,
+  "img_model_name": "default",
+  "pretrained": 1,
+  "data_dir": "data/petfinder-pawpularity-score/",
+  "image_size": 10,
+  "save_dir": "saved/1st_train",
+  "classifier_dims": [2072, 50, 8, 2],
+  "eps": 1e-5,
+  "device": "cpu",
+  "seed": 2020,
+  "tr_batch_size": 128,
+  "val_batch_size": 128,
+  "learning_rate": 1e-3,
+  "adam_epsilon": 1e-8,
+  "l2_reg":  1e-3,
+  "dropout": 0.2,
+  "split_ratio": 0.2,
+  "epochs": 20,
+  "msg": "put_whatever_you_want_here"
+}

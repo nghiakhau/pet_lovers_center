@@ -1,0 +1,23 @@
+class PetLoverCenterConfig:
+
+    def __init__(self, config):
+        self.num_features = config['num_features']
+        self.embedding_dim = config['embedding_dim']
+        self.img_model_name = config['img_model_name']
+        self.pretrained = config['pretrained']
+        self.classifier_dims = config['classifier_dims']
+        self.dropout = config['dropout']
+        self.eps = config['eps']
+        self.seed = config['seed']
+        self.data_dir = config['data_dir']
+        self.image_size = config['image_size']
+        self.tr_batch_size = config['tr_batch_size']
+        self.val_batch_size = config['val_batch_size']
+        self.save_dir = config['save_dir']
+        self.device = config['device']
+        self.learning_rate = config['learning_rate']
+        self.adam_epsilon = config['adam_epsilon']
+        self.l2_reg = config['l2_reg']
+        self.epochs = config['epochs']
+        self.split_ratio = config['split_ratio']
+        self.msg = config['msg']
