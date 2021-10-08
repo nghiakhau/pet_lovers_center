@@ -54,11 +54,11 @@ class PetDataset(Dataset):
         self.image_size = image_size
         self.transform = transform
         if test:
-            self.xs = data.iloc[:, 1:].head(100).copy().values
+            self.xs = data.iloc[:, 1:].copy().values
         else:
-            self.xs = data.iloc[:, 1:-1].head(100).copy().values
+            self.xs = data.iloc[:, 1:-1].copy().values
         self.xs = np.apply_along_axis(transform_binary_features, 1, self.xs)
-        self.ys = data.iloc[:, -1].head(100).copy().values/100
+        self.ys = data.iloc[:, -1].copy().values/100
 
     def __len__(self):
         # return len(self.img_names)
