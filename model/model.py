@@ -5,7 +5,7 @@ import re
 
 
 class PetLoverCenter(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, logging):
         super(PetLoverCenter, self).__init__()
 
         # embed img features
@@ -62,11 +62,13 @@ class PetLoverCenter(nn.Module):
             self.encode_img = models.resnet50(
                 pretrained=config.pretrained, progress=True)
             if config.pretrained:
+                print('Freeze pretrained weight')
+                logging.info('Freeze pretrained weight')
                 self.freeze()
             self.encode_img = nn.Sequential(
                 *[*self.encode_img.children()][:-1])
             self.encode_img.add_module("Flatten", nn.Flatten())
-            # 2050
+            # 2048
             in_features = self.encode_img[-3][2].bn3.num_features
             print("Number of features of '{}' model = {}".format(
                 config.img_model_name, in_features))
@@ -75,6 +77,8 @@ class PetLoverCenter(nn.Module):
         for i, (d_in, d_out) in enumerate(
                 zip(config.classifier_dims[:-1], config.classifier_dims[1:])):
             self.classifier.add_module(
+                "DROPOUT_" + str(i + 1), nn.Dropout(config.dropout))
+            self.classifier.add_module(
                 "FC_" + str(i + 1), nn.Linear(
                     in_features=d_in, out_features=d_out))
             if i != len(config.classifier_dims) - 2:
@@ -82,6 +86,9 @@ class PetLoverCenter(nn.Module):
                     "BN_" + str(i + 1), nn.BatchNorm1d(
                         num_features=d_out, eps=config.eps))
                 self.classifier.add_module("ACT_" + str(i + 1), nn.ReLU())
+            else:
+                self.classifier.add_module("ACT_" + str(i + 1), nn.Sigmoid())
+        print(self.classifier)
         self.init_weights()
 
     def init_weights(self):
@@ -102,8 +109,11 @@ class PetLoverCenter(nn.Module):
         x = self.classifier(torch.cat((img, x), 1))
         return x[:, 0], x[:, 1]
 
-    def forward(self, img, x):
+    def forward(self, img, x, training):
         mu, logvar = self.encode(img, x)
-        std = torch.exp(0.5 * logvar)
-        eps = torch.randn_like(std)
-        return eps.mul(std).add_(mu), mu, logvar
+        if training:
+            std = torch.exp(0.5 * logvar)
+            eps = torch.randn_like(std)
+            return eps.mul(std).add_(mu), mu, logvar
+        else:
+            return mu, mu, logvar

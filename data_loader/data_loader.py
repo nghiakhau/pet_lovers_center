@@ -61,8 +61,7 @@ class PetDataset(Dataset):
         self.ys = data.iloc[:, -1].copy().values/100
 
     def __len__(self):
-        # return len(self.img_names)
-        return 100
+        return len(self.img_names)
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir, self.img_names[idx] + ".jpg")

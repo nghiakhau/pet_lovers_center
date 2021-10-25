@@ -35,7 +35,7 @@ def train(data_loader, model, criterion, optimizer, device):
     for i, batch in enumerate(data_loader):
         batch.to_device(device)
         optimizer.zero_grad()
-        out, mu, logvar = model(batch.imgs, batch.xs)
+        out, mu, logvar = model(batch.imgs, batch.xs, True)
         loss = criterion(out, batch.ys, mu, logvar)
         losses += loss.item()
         loss.backward()
@@ -52,10 +52,14 @@ def test(data_loader, model, criterion, device):
     with torch.no_grad():
         for i, batch in enumerate(data_loader):
             batch.to_device(device)
-            out, mu, logvar = model(batch.imgs, batch.xs)
+            out, mu, logvar = model(batch.imgs, batch.xs, False)
             loss = criterion(out, batch.ys, mu, logvar)
             losses += loss.item()
-            mse_losses += mean_squared_error(out, batch.ys)
+            if device == "cuda":
+                mse_losses += mean_squared_error(
+                    out.cpu().numpy(), batch.ys.cpu().numpy())
+            else:
+                mse_losses += mean_squared_error(out, batch.ys)
 
     return losses/len(data_loader), 100 * mse_losses/len(data_loader)
 
@@ -102,12 +106,10 @@ if __name__ == '__main__':
         json.dump(json.load(open(args.config_path)), f, indent=2)
 
     device = config.device
-    model = PetLoverCenter(config)
+    model = PetLoverCenter(config, logging)
     model.to(device)
 
-    optimizer = torch.optim.Adam(
-        model.parameters(), lr=config.learning_rate,
-        weight_decay=config.l2_reg)
+    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
     criterion = loss_function
     epochs = config.epochs
 
