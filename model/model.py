@@ -5,7 +5,7 @@ import re
 
 
 class PetLoverCenter(nn.Module):
-    def __init__(self, config, logging):
+    def __init__(self, config, logging=None):
         super(PetLoverCenter, self).__init__()
 
         # embed img features
@@ -13,6 +13,7 @@ class PetLoverCenter(nn.Module):
                                        embedding_dim=config.embedding_dim)
 
         # encode img
+        print("Encode img using {} model".format(config.img_model_name))
         if re.match(r"^vgg$", config.img_model_name, re.IGNORECASE):
             self.encode_img = models.vgg16_bn(
                 pretrained=config.pretrained, progress=True)
@@ -25,7 +26,7 @@ class PetLoverCenter(nn.Module):
                     output_size=(2, 2)))
             self.encode_img.add_module("Flatten", nn.Flatten())
             in_features = self.encode_img[-3][41].num_features * 2 * 2
-            print("Number of features of '{}' model = {}".format(
+            print("Number of out features of '{}' model = {}".format(
                 config.img_model_name, in_features))
 
         elif re.match(r"^mobilenet$", config.img_model_name, re.IGNORECASE):
@@ -40,7 +41,7 @@ class PetLoverCenter(nn.Module):
                     output_size=(1, 1)))
             self.encode_img.add_module("Flatten", nn.Flatten())
             in_features = self.encode_img[-3][-1][1].num_features
-            print("Number of features of '{}' model = {}".format(
+            print("Number of out features of '{}' model = {}".format(
                 config.img_model_name, in_features))
 
         elif re.match(r"^densenet$", config.img_model_name, re.IGNORECASE):
@@ -55,7 +56,7 @@ class PetLoverCenter(nn.Module):
                     output_size=(1, 1)))
             self.encode_img.add_module("Flatten", nn.Flatten())
             in_features = self.encode_img[0].norm5.num_features
-            print("Number of features of '{}' model = {}".format(
+            print("Number of out features of '{}' model = {}".format(
                 config.img_model_name, in_features))
 
         else:
@@ -63,25 +64,32 @@ class PetLoverCenter(nn.Module):
                 pretrained=config.pretrained, progress=True)
             if config.pretrained:
                 print('Freeze pretrained weight')
-                logging.info('Freeze pretrained weight')
+                if logging:
+                    logging.info('Freeze pretrained weight')
                 self.freeze()
             self.encode_img = nn.Sequential(
                 *[*self.encode_img.children()][:-1])
             self.encode_img.add_module("Flatten", nn.Flatten())
             # 2048
             in_features = self.encode_img[-3][2].bn3.num_features
-            print("Number of features of '{}' model = {}".format(
+            print("Number of out features of '{}' model = {}".format(
                 config.img_model_name, in_features))
+
+        classifier_dims = [
+            in_features + config.num_features * config.embedding_dim]
+        classifier_dims.extend(config.classifier_dims)
+        print("Encode img features with the following layers: {}".format(
+            classifier_dims))
 
         self.classifier = nn.Sequential()
         for i, (d_in, d_out) in enumerate(
-                zip(config.classifier_dims[:-1], config.classifier_dims[1:])):
+                zip(classifier_dims[:-1], classifier_dims[1:])):
             self.classifier.add_module(
                 "DROPOUT_" + str(i + 1), nn.Dropout(config.dropout))
             self.classifier.add_module(
                 "FC_" + str(i + 1), nn.Linear(
                     in_features=d_in, out_features=d_out))
-            if i != len(config.classifier_dims) - 2:
+            if i != len(classifier_dims) - 2:
                 self.classifier.add_module(
                     "BN_" + str(i + 1), nn.BatchNorm1d(
                         num_features=d_out, eps=config.eps))
