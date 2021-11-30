@@ -93,9 +93,9 @@ class PetLoverCenter(nn.Module):
                 self.classifier.add_module(
                     "BN_" + str(i + 1), nn.BatchNorm1d(
                         num_features=d_out, eps=config.eps))
-                # self.classifier.add_module("ACT_" + str(i + 1), nn.ReLU())
-            else:
                 self.classifier.add_module("ACT_" + str(i + 1), nn.ReLU())
+            else:
+                self.classifier.add_module("ACT_" + str(i + 1), nn.Sigmoid())
         print(self.classifier)
         # self.init_weights()
 

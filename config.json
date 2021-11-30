@@ -1,7 +1,7 @@
 {
   "num_features": 12,
   "embedding_dim": 20,
-  "img_model_name": "resnet",
+  "img_model_name": "vgg",
   "pretrained": 0,
   "data_dir": "data/petfinder-pawpularity-score/",
   "image_size": 200,
