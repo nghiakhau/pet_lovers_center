@@ -5,6 +5,7 @@ import json
 import logging
 import time
 import torch
+from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader, random_split
 
@@ -12,7 +13,7 @@ from model.batch import generate_batch
 from model.model import PetLoverCenter
 from model.config import PetLoverCenterConfig
 from data_loader.data_loader import PetDataset
-from model.loss import loss_function
+# from model.loss import loss_function
 from utils.utils import plot_results
 
 from sklearn.metrics import mean_squared_error
@@ -35,8 +36,10 @@ def train(data_loader, model, criterion, optimizer, device):
     for i, batch in enumerate(data_loader):
         batch.to_device(device)
         optimizer.zero_grad()
-        out, mu, logvar = model(batch.imgs, batch.xs, True)
-        loss = criterion(out, batch.ys, mu, logvar)
+        # out, mu, logvar = model(batch.imgs, batch.xs, True)
+        # loss = criterion(out, batch.ys, mu, logvar)
+        out = model(batch.imgs, batch.xs, True)
+        loss = criterion(out, torch.unsqueeze(batch.ys, 1))
         losses += loss.item()
         loss.backward()
         optimizer.step()
@@ -52,8 +55,10 @@ def test(data_loader, model, criterion, device):
     with torch.no_grad():
         for i, batch in enumerate(data_loader):
             batch.to_device(device)
-            out, mu, logvar = model(batch.imgs, batch.xs, False)
-            loss = criterion(out, batch.ys, mu, logvar)
+            # out, mu, logvar = model(batch.imgs, batch.xs, False)
+            # loss = criterion(out, batch.ys, mu, logvar)
+            out = model(batch.imgs, batch.xs, True)
+            loss = criterion(out, torch.unsqueeze(batch.ys, 1))
             losses += loss.item()
             if device == "cuda":
                 mse_losses += mean_squared_error(
@@ -110,7 +115,8 @@ if __name__ == '__main__':
     model.to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
-    criterion = loss_function
+    # criterion = loss_function
+    criterion = nn.MSELoss()
     epochs = config.epochs
 
     logging.info('Begin training')

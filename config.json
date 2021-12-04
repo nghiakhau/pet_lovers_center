@@ -6,7 +6,7 @@
   "data_dir": "data/petfinder-pawpularity-score/",
   "image_size": 200,
   "save_dir": "saved/1st_train",
-  "classifier_dims": [256, 32, 2],
+  "classifier_dims": [256, 32, 1],
   "eps": 1e-5,
   "device": "cuda",
   "seed": 2020,

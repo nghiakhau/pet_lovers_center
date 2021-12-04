@@ -115,13 +115,15 @@ class PetLoverCenter(nn.Module):
         # x = torch.sum(x, -2)
         x = x.view(img.size()[0], -1)
         x = self.classifier(torch.cat((img, x), 1))
-        return x[:, 0], x[:, 1]
+        # return x[:, 0], x[:, 1]
+        return x
 
     def forward(self, img, x, training):
-        mu, logvar = self.encode(img, x)
-        if training:
-            std = torch.exp(0.5 * logvar)
-            eps = torch.randn_like(std)
-            return eps.mul(std).add_(mu), mu, logvar
-        else:
-            return mu, mu, logvar
+        # mu, logvar = self.encode(img, x)
+        # if training:
+        #     std = torch.exp(0.5 * logvar)
+        #     eps = torch.randn_like(std)
+        #     return eps.mul(std).add_(mu), mu, logvar
+        # else:
+        #     return mu, mu, logvar
+        return self.encode(img, x)
