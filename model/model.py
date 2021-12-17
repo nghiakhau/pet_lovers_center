@@ -13,11 +13,12 @@ class PetLoverCenter(nn.Module):
                                        embedding_dim=config.embedding_dim)
 
         # encode img
+        pretrained = True if config.pretrained == 1 else False
         print("Encode img using {} model".format(config.img_model_name))
         if re.match(r"^vgg$", config.img_model_name, re.IGNORECASE):
             self.encode_img = models.vgg16_bn(
-                pretrained=config.pretrained, progress=True)
-            if config.pretrained:
+                pretrained=pretrained, progress=True)
+            if pretrained:
                 self.freeze()
             self.encode_img = nn.Sequential(
                 *[*self.encode_img.children()][:-2])
@@ -31,8 +32,8 @@ class PetLoverCenter(nn.Module):
 
         elif re.match(r"^mobilenet$", config.img_model_name, re.IGNORECASE):
             self.encode_img = models.mobilenet_v2(
-                pretrained=config.pretrained, progress=True)
-            if config.pretrained:
+                pretrained=pretrained, progress=True)
+            if pretrained:
                 self.freeze()
             self.encode_img = nn.Sequential(
                 *[*self.encode_img.children()][:-1])
@@ -46,8 +47,8 @@ class PetLoverCenter(nn.Module):
 
         elif re.match(r"^densenet$", config.img_model_name, re.IGNORECASE):
             self.encode_img = models.densenet169(
-                pretrained=config.pretrained, progress=True)
-            if config.pretrained:
+                pretrained=pretrained, progress=True)
+            if pretrained:
                 self.freeze()
             self.encode_img = nn.Sequential(
                 *[*self.encode_img.children()][:-1])
@@ -61,8 +62,8 @@ class PetLoverCenter(nn.Module):
 
         else:
             self.encode_img = models.resnet50(
-                pretrained=config.pretrained, progress=True)
-            if config.pretrained:
+                pretrained=pretrained, progress=True)
+            if pretrained:
                 print('Freeze pretrained weight')
                 if logging:
                     logging.info('Freeze pretrained weight')
