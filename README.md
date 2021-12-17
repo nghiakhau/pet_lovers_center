@@ -1,6 +1,6 @@
 ### CIFAR-10 - Object Recognition in Images
 
-CIFAR-10 is an established computer-vision dataset used for object recognition. It is a subset of the 80 million tiny images dataset and consists of 60,000 32x32 color images containing one of 10 object classes, with 6000 images per class. [It](http://www.cs.toronto.edu/~kriz/cifar.html) was collected by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton.
+...CIFAR-10 is an established computer-vision dataset used for object recognition. It is a subset of the 80 million tiny images dataset and consists of 60,000 32x32 color images containing one of 10 object classes, with 6000 images per class. [It](http://www.cs.toronto.edu/~kriz/cifar.html) was collected by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton.
 
 This repo contains the code (PyTorch) for training a simple CNNs model and has following directory structure:
 ```
