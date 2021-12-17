@@ -5,7 +5,6 @@ import cv2
 import os
 from torchvision import transforms
 import matplotlib.pyplot as plt
-import glob
 
 
 def show_image(filepath, img_size=224):

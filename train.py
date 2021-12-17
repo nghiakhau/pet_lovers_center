@@ -8,7 +8,7 @@ import torch
 from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader, random_split
-
+from torchvision import transforms
 from model.batch import generate_batch
 from model.model import PetLoverCenter
 from model.config import PetLoverCenterConfig
@@ -76,7 +76,14 @@ if __name__ == '__main__':
     set_seed(config.seed)
     data_dir = os.path.join(config.data_dir, "train.csv")
     img_dir = os.path.join(config.data_dir, "train")
-    data = PetDataset(data_dir, img_dir, config.img_size, transform=None)
+    transform = transforms.Compose([
+                    transforms.ToPILImage(),
+                    transforms.RandomHorizontalFlip(p=0.5),
+                    transforms.RandomRotation(degrees=45),
+                    transforms.PILToTensor()])
+    data = PetDataset(
+            data_dir=data_dir, img_dir=img_dir, img_size=config.img_size,
+            test=False, transform=transform)
 
     num_data = len(data)
     num_val = round(num_data * config.split_ratio)
