@@ -67,7 +67,7 @@ def get_image(
         img = transforms(img)
     else:
         # (H, W, C) => (C, H, W)
-        img = np.moveaxis(img.numpy(), -1, 0)
+        img = np.moveaxis(img, -1, 0)
     return img
 
 
