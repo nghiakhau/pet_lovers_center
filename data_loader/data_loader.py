@@ -20,7 +20,7 @@ def show_transformed_image(filepath, img_size=224):
                     transforms.ToPILImage(),
                     transforms.RandomHorizontalFlip(p=0.5),
                     transforms.RandomRotation(degrees=45),
-                    transforms.PILToTensor(),
+                    transforms.ToTensor()
                     ])
     img = cv2.imread(filepath)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -31,6 +31,7 @@ def show_transformed_image(filepath, img_size=224):
     return plt.imshow(img)
 
 
+# import glob
 # img = np.random.choice(glob.glob('data/petfinder-pawpularity-score/train/*'))
 # show_image(img)
 # show_transformed_image(img)
