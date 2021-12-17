@@ -57,13 +57,13 @@ test_transform = transforms.Compose([
 
 
 def get_image(
-        path: str, size: int, transforms: transforms.Compose) -> np.ndarray:
+        path: str, size: int, transform: transforms.Compose) -> np.ndarray:
     img = cv2.imread(path, cv2.IMREAD_COLOR)
     img = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2RGB)
     img = cv2.resize(
         src=img, dsize=(size, size), interpolation=cv2.INTER_AREA)
-    if transforms:
-        img = transforms(img)
+    if transform:
+        img = transform(img)
     else:
         # (H, W, C) => (C, H, W)
         img = np.moveaxis(img, -1, 0)
