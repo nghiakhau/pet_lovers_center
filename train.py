@@ -76,7 +76,7 @@ if __name__ == '__main__':
     set_seed(config.seed)
     data_dir = os.path.join(config.data_dir, "train.csv")
     img_dir = os.path.join(config.data_dir, "train")
-    data = PetDataset(data_dir, img_dir, config.image_size, transform=None)
+    data = PetDataset(data_dir, img_dir, config.img_size, transform=None)
 
     num_data = len(data)
     num_val = round(num_data * config.split_ratio)

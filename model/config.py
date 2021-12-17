@@ -10,7 +10,7 @@ class PetLoverCenterConfig:
         self.eps = config['eps']
         self.seed = config['seed']
         self.data_dir = config['data_dir']
-        self.image_size = config['image_size']
+        self.img_size = config['img_size']
         self.tr_batch_size = config['tr_batch_size']
         self.val_batch_size = config['val_batch_size']
         self.save_dir = config['save_dir']
