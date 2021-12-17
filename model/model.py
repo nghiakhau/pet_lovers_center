@@ -14,7 +14,8 @@ class PetLoverCenter(nn.Module):
 
         # encode img
         pretrained = True if config.pretrained == 1 else False
-        print("Encode img using {} model".format(config.img_model_name))
+        print("Encode img using {} model. Pretrained = {}".format(
+            config.img_model_name, pretrained))
         if re.match(r"^vgg$", config.img_model_name, re.IGNORECASE):
             self.encode_img = models.vgg16_bn(
                 pretrained=pretrained, progress=True)
