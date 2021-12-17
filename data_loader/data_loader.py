@@ -64,6 +64,7 @@ def get_image(
         src=img, dsize=(size, size), interpolation=cv2.INTER_AREA)
     if transform:
         img = transform(img)
+        img = img.numpy()
     else:
         # (H, W, C) => (C, H, W)
         img = np.moveaxis(img, -1, 0)
