@@ -84,6 +84,12 @@ class PetDataset(Dataset):
         # "data/petfinder-pawpularity-score/test.csv"
 
         data = pd.read_csv(data_dir)
+        if not test:
+            num_obs = data.shape[0]
+            data = data[
+                ((data['Pawpularity'] >= 10) & (data['Pawpularity'] != 100))]
+            data.reset_index(drop=True, inplace=True)
+            print('Remove {} observations'.format(data.shape[0] - num_obs))
         self.img_names = data['Id'].copy().values
         self.img_dir = img_dir
         self.img_size = img_size

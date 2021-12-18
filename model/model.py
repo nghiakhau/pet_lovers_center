@@ -1,4 +1,3 @@
-import torch
 from torch import nn
 from torchvision import models
 import re
@@ -77,8 +76,9 @@ class PetLoverCenter(nn.Module):
             print("Number of out features of '{}' model = {}".format(
                 config.img_model_name, in_features))
 
-        classifier_dims = [
-            in_features + config.num_features * config.embedding_dim]
+        # classifier_dims = [
+        #     in_features + config.num_features * config.embedding_dim]
+        classifier_dims = [in_features]
         classifier_dims.extend(config.classifier_dims)
         print("Encode img features with the following layers: {}".format(
             classifier_dims))
@@ -112,12 +112,11 @@ class PetLoverCenter(nn.Module):
 
     def encode(self, img, x):
         img = self.encode_img(img)
-        x = self.embeddings(x)
-        # x = torch.sum(x, -2)
-        x = x.view(img.size()[0], -1)
-        x = self.classifier(torch.cat((img, x), 1))
-        # return x[:, 0], x[:, 1]
-        return x
+        # x = self.embeddings(x)
+        # x = x.view(img.size()[0], -1)
+        # x = self.classifier(torch.cat((img, x), 1))
+        # return x
+        return self.classifier(img)
 
     def forward(self, img, x, training):
         # mu, logvar = self.encode(img, x)
