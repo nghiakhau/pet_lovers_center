@@ -89,7 +89,7 @@ class PetDataset(Dataset):
             data = data[
                 ((data['Pawpularity'] >= 10) & (data['Pawpularity'] != 100))]
             data.reset_index(drop=True, inplace=True)
-            print('Remove {} observations'.format(data.shape[0] - num_obs))
+            print('Remove {} observations'.format(num_obs - data.shape[0]))
         self.img_names = data['Id'].copy().values
         self.img_dir = img_dir
         self.img_size = img_size
