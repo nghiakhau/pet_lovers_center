@@ -13,7 +13,7 @@
   "val_batch_size": 64,
   "learning_rate": 5e-4,
   "scheduler_step": 2,
-  "scheduler_factor" 0.1,
+  "scheduler_factor": 0.1,
   "dropout": 0.2,
   "test_ratio": 0.2,
   "epochs": 20,
