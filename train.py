@@ -86,7 +86,7 @@ if __name__ == '__main__':
             test=False, transform=transform)
 
     num_data = len(data)
-    num_val = round(num_data * config.split_ratio)
+    num_val = round(num_data * config.test_ratio)
     num_train = num_data - num_val
 
     train_data, val_data = random_split(data, [num_train, num_val])
@@ -122,6 +122,9 @@ if __name__ == '__main__':
     model.to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=config.scheduler_factor,
+        patience=config.scheduler_step)
     # criterion = loss_function
     criterion = nn.MSELoss()
     epochs = config.epochs
@@ -144,6 +147,7 @@ if __name__ == '__main__':
                 tr_data_loader, model, criterion, optimizer, device)
             val_loss, val_mse_loss = test(
                 te_data_loader, model, criterion, device)
+            scheduler.step(val_loss)
 
             writer.add_scalars(
                 'losses', {'training': tr_loss, 'validation': val_loss}, epoch)

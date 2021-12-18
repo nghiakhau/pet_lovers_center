@@ -93,8 +93,7 @@ class PetLoverCenter(nn.Module):
                     in_features=d_in, out_features=d_out))
             if i != len(classifier_dims) - 2:
                 self.classifier.add_module(
-                    "BN_" + str(i + 1), nn.BatchNorm1d(
-                        num_features=d_out, eps=config.eps))
+                    "BN_" + str(i + 1), nn.BatchNorm1d(num_features=d_out))
                 self.classifier.add_module("ACT_" + str(i + 1), nn.ReLU())
             else:
                 self.classifier.add_module("ACT_" + str(i + 1), nn.Sigmoid())
