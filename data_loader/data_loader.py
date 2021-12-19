@@ -22,8 +22,7 @@ def show_transformed_image(filepath, img_size=224):
                     transforms.RandomRotation(degrees=45),
                     transforms.ToTensor(),
                     transforms.Normalize(
-                        (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
-                    ])
+                        (0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
     img = cv2.imread(filepath)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(

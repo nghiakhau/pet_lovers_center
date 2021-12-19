@@ -80,9 +80,9 @@ if __name__ == '__main__':
                     transforms.ToPILImage(),
                     transforms.RandomHorizontalFlip(p=0.5),
                     transforms.RandomRotation(degrees=45),
-                    transforms.ToTensor()],
+                    transforms.ToTensor(),
                     transforms.Normalize(
-                        (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)))
+                        (0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
     data = PetDataset(
             data_dir=data_dir, img_dir=img_dir, img_size=config.img_size,
             test=False, transform=transform)
