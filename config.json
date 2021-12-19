@@ -5,7 +5,7 @@
   "pretrained": 1,
   "data_dir": "data/petfinder-pawpularity-score/",
   "img_size": 224,
-  "save_dir": "saved/3rd_train",
+  "save_dir": "saved/4th_train",
   "classifier_dims": [256, 64, 32, 1],
   "device": "cuda",
   "seed": 20202,
