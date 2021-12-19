@@ -84,7 +84,8 @@ class PetDataset(Dataset):
         # "data/petfinder-pawpularity-score/test.csv"
 
         data = pd.read_csv(data_dir)
-        if not test:
+        # if not test:
+        if False:
             num_obs = data.shape[0]
             data = data[
                 ((data['Pawpularity'] >= 10) & (data['Pawpularity'] != 100))]
