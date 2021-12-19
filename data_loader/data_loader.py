@@ -20,7 +20,9 @@ def show_transformed_image(filepath, img_size=224):
                     transforms.ToPILImage(),
                     transforms.RandomHorizontalFlip(p=0.5),
                     transforms.RandomRotation(degrees=45),
-                    transforms.ToTensor()
+                    transforms.ToTensor(),
+                    transforms.Normalize(
+                        (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                     ])
     img = cv2.imread(filepath)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -35,26 +37,6 @@ def show_transformed_image(filepath, img_size=224):
 # img = np.random.choice(glob.glob('data/petfinder-pawpularity-score/train/*'))
 # show_image(img)
 # show_transformed_image(img)
-
-
-# Pretrained Data Transforms
-TRANSFORM_PRE = transforms.Compose([
-     transforms.ToTensor(),
-     transforms.Normalize([0.485, 0.456, 0.406],
-                          [0.229, 0.224, 0.225])])
-
-# Non-pretrained Data Transforms
-TRANSFORM_NOPRE = transforms.Compose([transforms.ToTensor()])
-
-train_transform = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomRotation(degrees=45),
-                transforms.PILToTensor()])
-
-test_transform = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.PILToTensor()])
 
 
 def get_image(

@@ -59,8 +59,8 @@ plt.imshow(get_transformed_image(img))
 data_dir = "data/petfinder-pawpularity-score/train.csv"
 data = pd.read_csv(data_dir)
 
-data = data[((data['Pawpularity'] >= 10) & (data['Pawpularity'] != 100))]
-data.reset_index(drop=True, inplace=True)
+# data = data[((data['Pawpularity'] >= 10) & (data['Pawpularity'] != 100))]
+# data.reset_index(drop=True, inplace=True)
 # data['sum_feature'] = (data['Subject Focus'] + data['Eyes'] + data['Face'] +
 #                        data['Near'] + data['Action'] + data['Accessory'] +
 #                        data['Group'] + data['Collage'] + data['Human'] +
@@ -73,7 +73,7 @@ pcorr = data.pcorr()['Pawpularity'].round(3).sort_values()
 pcorr
 data['Id'] = data['Id'].apply(
     lambda x: "data/petfinder-pawpularity-score/train/" + x + ".jpg")
-data.head()
+data.head(2)
 
 # Pawpularity score distribution
 # There are 288 observations that have Pawpularity score = 100 (propably noise)
